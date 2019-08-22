@@ -6,8 +6,7 @@ const jsonwebtoken = require('jsonwebtoken');
 const User = require('../models/user');
 const { SECRET_KEY } = process.env;
 
-
-//TODO: change this to actually be the Student View
+//TODO: change this to actually be the actual view and to use authorization!
 router.get('/', async(req, res, next) => {
     console.log('HI GETTTTT');
 });
@@ -31,6 +30,7 @@ router.post('/signup', async(req, res, next) => {
         const hashedPwd = await bcrypt.hash(password, saltRounds);
 
 
+
         const newUser = await User.create({
             firstName,
             lastName,
@@ -39,7 +39,11 @@ router.post('/signup', async(req, res, next) => {
             admin
         });
 
-        res.json({ status, newUser });
+       const payload = {id: newUser._id};
+       const options = { expiresIn: '1 day' };
+       const token = jsonwebtoken.sign(payload, 'SECRET_KEY', options);
+
+       res.json({ status, token });
 
     } catch(e) {
         console.error(e);
