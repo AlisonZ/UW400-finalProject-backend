@@ -47,4 +47,25 @@ router.post('/signup', async(req, res, next) => {
     }
 });
 
+
+router.post('/login', async(req, res, next) => {
+    const status = 201;
+    try {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({email});
+        if (!user) throw new Error('There is an error with your login credentials');
+
+        const isPwdCorrect = await bcrypt.compare(password, user.password);
+        if (!isPwdCorrect) throw new Error('There is an error with your login credentials');
+
+        console.log('You are logged in!!!');
+    } catch(e) {
+       console.error(e);
+       const error = new Error('There is an error with your login credentials');
+       error.status = 400;
+       next(error);
+    }
+});
+
 module.exports = router;
