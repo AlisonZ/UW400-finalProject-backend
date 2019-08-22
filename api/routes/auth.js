@@ -1,8 +1,10 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
+const jsonwebtoken = require('jsonwebtoken');
 
 
 const User = require('../models/user');
+const { SECRET_KEY } = process.env;
 
 
 //TODO: change this to actually be the Student View
@@ -59,7 +61,12 @@ router.post('/login', async(req, res, next) => {
         const isPwdCorrect = await bcrypt.compare(password, user.password);
         if (!isPwdCorrect) throw new Error('There is an error with your login credentials');
 
-        console.log('You are logged in!!!');
+
+        const payload = {id: user._id};
+        const options = { expiresIn: '1 day' };
+        const token = jsonwebtoken.sign(payload, 'SECRET_KEY', options);
+
+        res.json({ status, token });
     } catch(e) {
        console.error(e);
        const error = new Error('There is an error with your login credentials');
