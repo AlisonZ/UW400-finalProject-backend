@@ -6,26 +6,21 @@ const app = express()
 
 
 // Database Connection
-// in the w6 project this is pulled out into a connection file under /db
 require('./db/connection')()
-//if (MONGO_DB_CONNECTION) {
-//  mongoose.connect(MONGO_DB_CONNECTION, { useNewUrlParser: true, useFindAndModify: false })
-//  console.log('Connected to database...')
-//} else {
-//  console.log('Could not connect to database!')
-//}
 
 //Middleware
-if (NODE_ENV === 'development') app.use(require('morgan')('dev'))
-app.use(require('body-parser').json())
+if (NODE_ENV === 'development') app.use(require('morgan')('dev'));
+app.use(require('body-parser').json());
 
 
 // Routes
-app.get('/', (req, res, next) => {
-  res.json({
-    message: `Hello, Express!`
-  })
-})
+//app.get('/', (req, res, next) => {
+//  res.json({
+//    message: `Hello, Express!`
+//  })
+//})
+
+app.use('/api', require('./api/routes/auth'));
 
 
 //ADD ERROR HANDLERS FOR ROUTES NOT FOUND
@@ -34,3 +29,5 @@ app.get('/', (req, res, next) => {
 //OPEN CONNECTION
 const listener = () => console.log(`Listening on Port ${PORT}`)
 app.listen(PORT, listener)
+
+
