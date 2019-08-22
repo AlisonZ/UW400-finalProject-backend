@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
-    "debug": "PORT=5000 node --inspect app.js"
+    "debug": "PORT=5000 node --inspect app.js",
+    "reset-db": "node ./db/seeds"
   },
   "keywords": [],
   "author": "",

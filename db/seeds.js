@@ -4,9 +4,9 @@ const User = require('../api/models/user');
 
 const reset = async() => {
     mongoose.connect(config.env.MONGO_DB_CONNECTION, { useNewUrlParser: true });
-    await.User.deleteMany();
 
 
+    await User.deleteMany();
 
     return User.create([
         {
@@ -25,16 +25,15 @@ const reset = async() => {
             ]
 
         },
-        //TODO: does this work to seed a couple of users? or need to do another way
-//        {
-//            firstName: 'Admin',
-//            lastName: 'User',
-//            email: 'admin@email.com',
-//            //TODO: change this to use bcrypt
-//            password: 'password',
-//            admin: true,
-//            assignments: []
-//        }
+        {
+            firstName: 'Admin',
+            lastName: 'User',
+            email: 'admin@email.com',
+            //TODO: change this to use bcrypt
+            password: 'password',
+            admin: true,
+            assignments: []
+        }
 
     ]);
 }
