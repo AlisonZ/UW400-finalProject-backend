@@ -21,6 +21,8 @@ app.use(require('body-parser').json());
 //})
 
 app.use('/api', require('./api/routes/auth'));
+app.use('/api/users', require('./api/routes/users'))
+
 
 
 //ADD ERROR HANDLERS FOR ROUTES NOT FOUND
