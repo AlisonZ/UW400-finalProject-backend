@@ -16,15 +16,22 @@ const reset = async() => {
             firstName: 'Student',
             lastName: 'User',
             email: 'student@email.com',
-            //TODO: change this to use bcrypt
             password: bcrypt.hashSync('password', 10),
             admin: false,
             assignments: [
                 {
                    assignmentTitle: 'Assignment One',
                    assignmentLink: 'fake-url.com',
-                   assignmentDescription: 'Seed data'
-                }
+                   assignmentDescription: 'Seed data',
+                   assignmentGrade: 95
+                },
+                {
+                    assignmentTitle: 'Assignment Two',
+                    assignmentLink: 'fake-url.com',
+                    assignmentDescription: 'Seed data two',
+                    assignmentGrade: 85
+
+                 }
             ]
 
         },
@@ -32,7 +39,6 @@ const reset = async() => {
             firstName: 'Admin',
             lastName: 'User',
             email: 'admin@email.com',
-            //TODO: change this to use bcrypt
             password: bcrypt.hashSync('password', 10),
             admin: true,
             assignments: []

@@ -12,6 +12,9 @@ const schema = new mongoose.Schema({
     assignmentDescription: {
         type: String,
         required: true
+    },
+    assignmentGrade: {
+        type: Number
     }
 });
 
