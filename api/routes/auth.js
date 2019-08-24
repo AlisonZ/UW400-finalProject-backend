@@ -87,6 +87,8 @@ router.get('/', async (req, res, next) => {
     const payload = jsonwebtoken.verify(token, SECRET_KEY)
     const user = await User.findOne({ _id: payload.id }).select('-__v -password')
 
+    if (user.admin) throw new Error('You are not authorized to access this page');
+
     const assignments = user.assignments;
 
     const status = 200
