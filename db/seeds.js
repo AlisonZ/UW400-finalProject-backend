@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const config = require('../nodemon.json');
+const bcrypt = require('bcrypt');
+
+
 const User = require('../api/models/user');
 
 const reset = async() => {
@@ -14,7 +17,7 @@ const reset = async() => {
             lastName: 'User',
             email: 'student@email.com',
             //TODO: change this to use bcrypt
-            password: 'password',
+            password: bcrypt.hashSync('password', 10),
             admin: false,
             assignments: [
                 {
@@ -30,7 +33,7 @@ const reset = async() => {
             lastName: 'User',
             email: 'admin@email.com',
             //TODO: change this to use bcrypt
-            password: 'password',
+            password: bcrypt.hashSync('password', 10),
             admin: true,
             assignments: []
         }

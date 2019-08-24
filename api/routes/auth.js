@@ -7,12 +7,13 @@ const User = require('../models/user');
 const { SECRET_KEY } = process.env;
 
 //TODO: change this to actually be the actual view and to use authorization!
-router.get('/', async(req, res, next) => {
-    console.log('HI GETTTTT');
-});
+//router.get('/', async(req, res, next) => {
+//    console.log('HI GETTTTT');
+//});
 
 
 router.post('/signup', async(req, res, next) => {
+
     const status = 201;
 
     try {
@@ -41,7 +42,7 @@ router.post('/signup', async(req, res, next) => {
 
        const payload = {id: newUser._id};
        const options = { expiresIn: '1 day' };
-       const token = jsonwebtoken.sign(payload, 'SECRET_KEY', options);
+       const token = jsonwebtoken.sign(payload, SECRET_KEY, options);
 
        res.json({ status, token });
 
@@ -68,7 +69,7 @@ router.post('/login', async(req, res, next) => {
 
         const payload = {id: user._id};
         const options = { expiresIn: '1 day' };
-        const token = jsonwebtoken.sign(payload, 'SECRET_KEY', options);
+        const token = jsonwebtoken.sign(payload, SECRET_KEY, options);
 
         res.json({ status, token });
     } catch(e) {
