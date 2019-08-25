@@ -17,7 +17,7 @@ app.use(require('body-parser').json());
 
 app.use('/api', require('./api/routes/auth'));
 //this users path may be unnecessary and maybe should be in another location with a different path?
-app.use('/api/users', require('./api/routes/users'));
+//app.use('/api/users', require('./api/routes/users'));
 app.use('/api/students', require('./api/routes/students'));
 app.use('/api/assignments', require('./api/routes/assignments'));
 

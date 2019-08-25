@@ -6,9 +6,7 @@ const User = require('../models/user');
 const { SECRET_KEY } = process.env;
 
 //gets list of students for admin and !admin
-//TODO: move to students.js
 router.get('/', async(req, res, next) => {
-
     try {
         const token = req.headers.authorization.split('Bearer ')[1];
         const payload = jsonwebtoken.verify(token, SECRET_KEY);
@@ -33,7 +31,20 @@ router.get('/', async(req, res, next) => {
                 }
             });
         } else {
-            //TODO: add the return of different info for a logged in admin
+            users.map((user) => {
+                if(!user.admin) {
+                const assignGrade = user.assignments.assignmentGrade ? user.assignments.assignmentGrade : 'TBD';
+                console.log('user', assignGrade)
+                   studentList.push({
+                    "firstName": user.firstName,
+                    "lastName": user.lastName,
+                    "email": user.email,
+                    "assignmentGrade": assignGrade
+
+                  });
+
+                }
+            });
         }
 
         const status = 200;
