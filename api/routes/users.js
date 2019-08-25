@@ -30,7 +30,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-    router.delete('/:assignId', async (req, res, next) => {
+router.delete('/:assignId', async (req, res, next) => {
     try {
         const token = req.headers.authorization.split('Bearer ')[1];
         const payload = jsonwebtoken.verify(token, SECRET_KEY);
@@ -51,6 +51,38 @@ router.get('/', async (req, res, next) => {
         error.status = 401;
         next(error);
     }
+
+});
+
+//TODO: figure out how to better pass these down as params; this doesn't seem correct
+router.put('/:assignId/:userId', async(req, res, next) => {
+
+    try {
+    const { assignId, userId } = req.params;
+
+    const user = await User.findOne({ _id: userId });
+    const assignment = user.assignments.id(assignId);
+
+    const { assignmentTitle, assignmentLink, assignmentDescription } = req.body;
+
+    assignment.assignmentTitle = assignmentTitle;
+    assignment.assignmentLink = assignmentLink;
+    assignment.assignmentDescription = assignmentDescription;
+
+    await user.save();
+
+    const status = 200;
+
+    res.json({ status, response: assignment });
+    }
+    catch(e) {
+        console.error(e);
+        const error = new Error('There was a problem updating your assignment');
+        error.status = 401;
+        next(error);
+    }
+
+
 
 });
 
