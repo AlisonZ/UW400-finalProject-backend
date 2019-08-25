@@ -64,7 +64,6 @@ router.put('/:assignId/:userId', async(req, res, next) => {
     const payload = jsonwebtoken.verify(token, SECRET_KEY);
 
     const user = await User.findOne({ _id: payload.id });
-//    const user = await User.findOne({ _id: userId });
     const assignment = user.assignments.id(assignId);
 
     const { assignmentTitle, assignmentLink, assignmentDescription } = req.body;
@@ -88,6 +87,44 @@ router.put('/:assignId/:userId', async(req, res, next) => {
 });
 
 router.get('/students', async(req, res, next) => {
+
+    try {
+        const token = req.headers.authorization.split('Bearer ')[1];
+        const payload = jsonwebtoken.verify(token, SECRET_KEY);
+
+        //get current user
+        const currentUser = await User.findOne({ _id: payload.id });
+
+        //get all users
+        const users = await User.find({});
+
+        const studentList = [];
+
+        //determine what info to return based on admin privileges
+        if(!currentUser.admin) {
+            users.map((user) => {
+                if(!user.admin) {
+                    studentList.push({
+                        "firstName": user.firstName,
+                        "lastName": user.lastName,
+                        "email": user.email
+                    });
+                }
+            });
+        } else {
+            //TODO: add the return of different info for a logged in admin
+        }
+
+        const status = 200;
+        res.json({ status, studentList });
+    } catch(e) {
+        console.error(e);
+        const error = new Error('You do not have permissions to see this list');
+        error.status = 401;
+        next(error);
+    }
+
+
 
 });
 
