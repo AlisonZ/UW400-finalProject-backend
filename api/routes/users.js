@@ -8,31 +8,6 @@ const { SECRET_KEY } = process.env;
 //TODO: refactor to use isValid, isLoggedIn, etc in middleware
 
 
-//delete an assignment for a logged in !admin
-router.delete('/:assignId', async (req, res, next) => {
-    try {
-        const token = req.headers.authorization.split('Bearer ')[1];
-        const payload = jsonwebtoken.verify(token, SECRET_KEY);
-
-        const user = await User.findOne({ _id: payload.id });
-
-
-        user.assignments = user.assignments.filter(assignment => assignment._id.toString() !== req.params.assignId);
-
-        await user.save();
-
-        const status = 200;
-        res.json({ status, user })
-
-    } catch(e) {
-        console.error(e);
-        const error = new Error('There was a problem deleting this assignment');
-        error.status = 401;
-        next(error);
-    }
-
-});
-
 //edit an assignment --> should be moved to assignments.js
 //TODO: figure out how to better pass these down as params; this doesn't seem correct
 router.put('/:assignId/:userId', async(req, res, next) => {
