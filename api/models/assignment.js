@@ -20,5 +20,3 @@ const schema = new mongoose.Schema({
 
 module.exports = schema;
 
-//should it be this to match the user.js?
-//module.export = mongoose.model('Post', schema);
