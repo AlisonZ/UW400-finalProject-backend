@@ -19,6 +19,7 @@ router.get('/', async (req, res, next) => {
 
     const assignments = user.assignments;
 
+
     const status = 200
     res.json({ status, assignments })
   } catch (e) {
@@ -27,6 +28,30 @@ router.get('/', async (req, res, next) => {
     error.status = 401
     next(error)
   }
+});
+
+    router.delete('/:assignId', async (req, res, next) => {
+    try {
+        const token = req.headers.authorization.split('Bearer ')[1];
+        const payload = jsonwebtoken.verify(token, SECRET_KEY);
+
+        const user = await User.findOne({ _id: payload.id });
+
+
+        user.assignments = user.assignments.filter(assignment => assignment._id.toString() !== req.params.assignId);
+
+        await user.save();
+
+        const status = 200;
+        res.json({ status, user })
+
+    } catch(e) {
+        console.error(e);
+        const error = new Error('There was a problem deleting this assignment');
+        error.status = 401;
+        next(error);
+    }
+
 });
 
 
