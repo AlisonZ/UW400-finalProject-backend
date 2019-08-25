@@ -60,7 +60,11 @@ router.put('/:assignId/:userId', async(req, res, next) => {
     try {
     const { assignId, userId } = req.params;
 
-    const user = await User.findOne({ _id: userId });
+    const token = req.headers.authorization.split('Bearer ')[1];
+    const payload = jsonwebtoken.verify(token, SECRET_KEY);
+
+    const user = await User.findOne({ _id: payload.id });
+//    const user = await User.findOne({ _id: userId });
     const assignment = user.assignments.id(assignId);
 
     const { assignmentTitle, assignmentLink, assignmentDescription } = req.body;
@@ -81,8 +85,9 @@ router.put('/:assignId/:userId', async(req, res, next) => {
         error.status = 401;
         next(error);
     }
+});
 
-
+router.get('/students', async(req, res, next) => {
 
 });
 
