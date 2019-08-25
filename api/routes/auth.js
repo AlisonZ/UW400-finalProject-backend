@@ -6,11 +6,6 @@ const jsonwebtoken = require('jsonwebtoken');
 const User = require('../models/user');
 const { SECRET_KEY } = process.env;
 
-//TODO: change this to actually be the actual view and to use authorization!
-//router.get('/', async(req, res, next) => {
-//    console.log('HI GETTTTT');
-//});
-
 
 router.post('/signup', async(req, res, next) => {
 
@@ -78,6 +73,28 @@ router.post('/login', async(req, res, next) => {
        error.status = 400;
        next(error);
     }
+});
+
+//gets all assignments for a logged in !admin
+router.get('/', async (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split('Bearer ')[1]
+    const payload = jsonwebtoken.verify(token, SECRET_KEY)
+    const user = await User.findOne({ _id: payload.id }).select('-__v -password')
+
+    if (user.admin) throw new Error('You are not authorized to access this page');
+
+    const assignments = user.assignments;
+
+
+    const status = 200
+    res.json({ status, assignments })
+  } catch (e) {
+    console.error(e)
+    const error = new Error('You are not authorized to access this route.')
+    error.status = 401
+    next(error)
+  }
 });
 
 
