@@ -30,7 +30,6 @@ const reset = async() => {
                     assignmentLink: 'fake-url.com',
                     assignmentDescription: 'Seed data two',
                     assignmentGrade: 85
-
                  }
             ]
 
