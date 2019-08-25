@@ -41,6 +41,68 @@ const reset = async() => {
             password: bcrypt.hashSync('password', 10),
             admin: true,
             assignments: []
+        },
+        {
+            firstName: 'Alison',
+            lastName: 'Zerbe',
+            email: 'alison@email.com',
+            password: bcrypt.hashSync('password', 10),
+            admin: false,
+            assignments: [
+                {
+                   assignmentTitle: 'Alison One',
+                   assignmentLink: 'fake-url.com',
+                   assignmentDescription: 'Seed data',
+                   assignmentGrade: 95
+                },
+                {
+                    assignmentTitle: 'Alison Two',
+                    assignmentLink: 'fake-url.com',
+                    assignmentDescription: 'Seed data two',
+                }
+            ]
+
+        },
+        {
+            firstName: 'Robert',
+            lastName: 'Daniels',
+            email: 'robert@email.com',
+            password: bcrypt.hashSync('password', 10),
+            admin: false,
+            assignments: [
+                {
+                   assignmentTitle: 'Robert One',
+                   assignmentLink: 'fake-url.com',
+                   assignmentDescription: 'Seed data',
+                },
+                {
+                    assignmentTitle: 'Robert Two',
+                    assignmentLink: 'fake-url.com',
+                    assignmentDescription: 'Seed data two',
+                    assignmentGrade: 90
+                }
+            ]
+
+        },
+        {
+            firstName: 'Drew',
+            lastName: 'Zerbe',
+            email: 'drew@email.com',
+            password: bcrypt.hashSync('password', 10),
+            admin: false,
+            assignments: [
+                {
+                   assignmentTitle: 'Drew One',
+                   assignmentLink: 'fake-url.com',
+                   assignmentDescription: 'Seed data',
+                },
+                {
+                    assignmentTitle: 'Drew Two',
+                    assignmentLink: 'fake-url.com',
+                    assignmentDescription: 'Seed data two',
+                }
+            ]
+
         }
 
     ]);

@@ -30,7 +30,6 @@ router.post('/new', async(req, res, next) => {
     }
 });
 
-///edit an assignment --> should be moved to assignments.js
 //TODO: figure out how to better pass these down as params; this doesn't seem correct
 router.put('/:assignId/edit', async(req, res, next) => {
     try {
@@ -55,6 +54,48 @@ router.put('/:assignId/edit', async(req, res, next) => {
     res.json({ status, response: assignment });
     }
     catch(e) {
+        console.error(e);
+        const error = new Error('There was a problem updating your assignment');
+        error.status = 401;
+        next(error);
+    }
+});
+
+router.get('/ungraded', async(req, res, next) => {
+    try {
+        const token = req.headers.authorization.split('Bearer ')[1];
+        const payload = jsonwebtoken.verify(token, SECRET_KEY);
+
+        const user = await User.findOne({ _id: payload.id });
+        const allUsers = await User.find({});
+
+        const ungradedAssignments = [];
+
+        if(user.admin) {
+            allUsers.map((user) => {
+                if(!user.admin) {
+                //I know that this is On^2, but it is the only solution
+                //I could think of with the way that the databases and relationships are constructed right now
+                    user.assignments.map((assignment) => {
+                        if(!assignment.assignmentGrade) {
+                            ungradedAssignments.push(
+                                {
+                                    firstName: user.firstName,
+                                    lastName: user.lastName,
+                                    assignmentTitle: assignment.assignmentTitle,
+                                    assignmentLink: assignment.assignmentLink,
+                                }
+                            );
+                        }
+                    });
+                }
+            });
+        }
+
+        const status = 200;
+        res.json({ status, ungradedAssignments });
+
+    } catch(e) {
         console.error(e);
         const error = new Error('There was a problem updating your assignment');
         error.status = 401;
