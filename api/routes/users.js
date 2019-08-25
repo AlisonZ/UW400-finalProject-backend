@@ -8,7 +8,7 @@ const { SECRET_KEY } = process.env;
 //TODO: refactor to use isValid, isLoggedIn, etc in middleware
 
 
-
+//gets all assignments for a logged in !admin
 router.get('/', async (req, res, next) => {
   try {
     const token = req.headers.authorization.split('Bearer ')[1]
@@ -30,6 +30,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+//delete an assignment for a logged in !admin
 router.delete('/:assignId', async (req, res, next) => {
     try {
         const token = req.headers.authorization.split('Bearer ')[1];
@@ -54,6 +55,7 @@ router.delete('/:assignId', async (req, res, next) => {
 
 });
 
+//edit an assignment --> should be moved to assignments.js
 //TODO: figure out how to better pass these down as params; this doesn't seem correct
 router.put('/:assignId/:userId', async(req, res, next) => {
 
@@ -86,6 +88,8 @@ router.put('/:assignId/:userId', async(req, res, next) => {
     }
 });
 
+//gets list of students for admin and !admin
+//TODO: move to students.js
 router.get('/students', async(req, res, next) => {
 
     try {
