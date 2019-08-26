@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
 
 const { decodeToken, generateToken } = require('../lib/token');
+const { isLoggedIn } = require('../middleware/auth');
 
 
 const User = require('../models/user');
@@ -66,11 +67,14 @@ router.post('/login', async(req, res, next) => {
 });
 
 //gets all assignments for a logged in !admin
+//router.get('/', isLoggedIn, async (req, res, next) => {
 router.get('/', async (req, res, next) => {
+
   try {
-    const token = req.headers.authorization.split('Bearer ')[1]
-    const payload = jsonwebtoken.verify(token, SECRET_KEY)
-    const user = await User.findOne({ _id: payload.id }).select('-__v -password')
+    const token = req.headers.authorization.split('Bearer ')[1];
+    const payload = jsonwebtoken.verify(token, SECRET_KEY);
+
+    const user = await User.findOne({ _id: payload.id }).select('-__v -password');
 
     if (user.admin) throw new Error('You are not authorized to access this page');
 
