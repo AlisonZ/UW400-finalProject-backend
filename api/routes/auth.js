@@ -67,9 +67,7 @@ router.post('/login', async(req, res, next) => {
 });
 
 //gets all assignments for a logged in !admin
-//router.get('/', isLoggedIn, async (req, res, next) => {
-router.get('/', async (req, res, next) => {
-
+router.get('/', isLoggedIn, async (req, res, next) => {
   try {
     const token = req.headers.authorization.split('Bearer ')[1];
     const payload = jsonwebtoken.verify(token, SECRET_KEY);
