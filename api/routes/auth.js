@@ -2,6 +2,8 @@ const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
 
+const { decodeToken, generateToken } = require('../lib/token');
+
 
 const User = require('../models/user');
 const { SECRET_KEY } = process.env;
@@ -16,16 +18,9 @@ router.post('/signup', async(req, res, next) => {
 
         const user = await User.findOne({email});
         if (user) throw new Error(`This email ${email} is already registered to an account`);
-        //TODO: add other error handling when the front-end is connected to serve & display the errors to FE
-        //TODO: email: is present and is valid (not sure what 'valid' means)
-        // TODO: pwd is present and >= 8char
-        //TODO: firstName is present
-        //TODO: lastName is present
 
         const saltRounds = 10;
         const hashedPwd = await bcrypt.hash(password, saltRounds);
-
-
 
         const newUser = await User.create({
             firstName,
@@ -35,9 +30,7 @@ router.post('/signup', async(req, res, next) => {
             admin
         });
 
-       const payload = {id: newUser._id};
-       const options = { expiresIn: '1 day' };
-       const token = jsonwebtoken.sign(payload, SECRET_KEY, options);
+       const token = generateToken(newUser._id);
 
        res.json({ status, token });
 
@@ -61,10 +54,7 @@ router.post('/login', async(req, res, next) => {
         const isPwdCorrect = await bcrypt.compare(password, user.password);
         if (!isPwdCorrect) throw new Error('There is an error with your login credentials');
 
-
-        const payload = {id: user._id};
-        const options = { expiresIn: '1 day' };
-        const token = jsonwebtoken.sign(payload, SECRET_KEY, options);
+        const token = generateToken(user._id)
 
         res.json({ status, token });
     } catch(e) {
