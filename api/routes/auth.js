@@ -1,14 +1,11 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const jsonwebtoken = require('jsonwebtoken');
 
 const { decodeToken, generateToken } = require('../lib/token');
 const { isLoggedIn } = require('../middleware/auth');
 
 
 const User = require('../models/user');
-const { SECRET_KEY } = process.env;
-
 
 router.post('/signup', async(req, res, next) => {
 
@@ -69,8 +66,7 @@ router.post('/login', async(req, res, next) => {
 //gets all assignments for a logged in !admin
 router.get('/', isLoggedIn, async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split('Bearer ')[1];
-    const payload = jsonwebtoken.verify(token, SECRET_KEY);
+    const payload = decodeToken(req.token);
 
     const user = await User.findOne({ _id: payload.id }).select('-__v -password');
 
@@ -92,12 +88,9 @@ router.get('/', isLoggedIn, async (req, res, next) => {
 //delete an assignment for a logged in !admin
 router.delete('/:assignId', async (req, res, next) => {
     try {
-        const token = req.headers.authorization.split('Bearer ')[1];
-        const payload = jsonwebtoken.verify(token, SECRET_KEY);
+        const payload = decodeToken(req.token);
 
         const user = await User.findOne({ _id: payload.id });
-
-
         user.assignments = user.assignments.filter(assignment => assignment._id.toString() !== req.params.assignId);
 
         await user.save();
