@@ -1,8 +1,9 @@
 
-const { MONGO_DB_CONNECTION, NODE_ENV, PORT } = process.env
-const express = require('express')
-const mongoose = require('mongoose')
-const app = express()
+const { MONGO_DB_CONNECTION, NODE_ENV, PORT } = process.env;
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
+var cors = require('cors');
 
 
 // Database Connection
@@ -15,10 +16,10 @@ app.use(require('body-parser').json());
 //Attach token to request
 app.use(require('./api/middleware/set-token'));
 
-//app.use(cors({
-//    origin: 'http://localhost:3000',
-//    optionsSuccessStatus: 200
-//}));
+app.use(cors({
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200
+}));
 
 
 // Routes
