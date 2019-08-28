@@ -23,11 +23,10 @@ router.get('/profile', async (req, res, next) => {
 })
 
 router.post('/signup', async(req, res, next) => {
-
     const status = 201;
 
     try {
-        const { email, password, firstName, lastName, admin } = req.body;
+        const { email, password, firstName, lastName, admin = false } = req.body;
 
         const user = await User.findOne({email});
         if (user) throw new Error(`This email ${email} is already registered to an account`);
