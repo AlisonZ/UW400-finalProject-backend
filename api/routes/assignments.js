@@ -30,6 +30,34 @@ router.post('/new', async(req, res, next) => {
     }
 });
 
+router.get('/:assignId/edit', async(req, res, next) => {
+    try {
+        const { assignId } = req.params;
+        console.log('assign id', assignId)
+
+
+        const token = req.headers.authorization.split('Bearer ')[1];
+        const payload = jsonwebtoken.verify(token, SECRET_KEY);
+
+        const user = await User.findOne({ _id: payload.id });
+
+
+        const assignment = user.assignments.id(assignId);
+        console.log('BE userrr', user.assignments)
+
+        console.log('BE ass', assignment)
+        const status = 200;
+        res.json({ status, response: assignment });
+
+//        console.log('in the backend route assignment', assignment)
+    } catch(e) {
+        console.error(e);
+        const error = new Error('There was a problem updating your assignment');
+        error.status = 401;
+        next(error);
+    }
+});
+
 //TODO: figure out how to better pass these down as params; this doesn't seem correct
 router.put('/:assignId/edit', async(req, res, next) => {
     try {
