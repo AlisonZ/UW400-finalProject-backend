@@ -7,6 +7,7 @@ const { SECRET_KEY } = process.env;
 
 //gets list of students for admin and !admin
 router.get('/', async(req, res, next) => {
+    console.log('in the get');
     try {
         const token = req.headers.authorization.split('Bearer ')[1];
         const payload = jsonwebtoken.verify(token, SECRET_KEY);
