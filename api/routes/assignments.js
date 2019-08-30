@@ -168,7 +168,10 @@ router.get('/graded', async(req, res, next) => {
 });
 
 
-router.delete('/:assignId',async (req, res, next) => {
+//This route does not work and I do not have time to discern why
+//something to do with the :assignId getting passed in as the param
+router.delete('/', async (req, res, next) => {
+
   const status = 200
 
 
