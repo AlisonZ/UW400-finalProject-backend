@@ -168,6 +168,30 @@ router.get('/graded', async(req, res, next) => {
 });
 
 
+router.delete('/:assignId',async (req, res, next) => {
+  const status = 200
 
 
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const payload = jsonwebtoken.verify(token, SECRET_KEY);
+
+  const { assignId } = req.params
+
+  const user = await User.findOne({ _id: payload.id });
+
+  let updatedAssignList = [];
+
+    //could not get filter working correctly so did this sub-optimal solution
+  user.assignments.map ((assign) => {
+  if(assignId !== assign._id.toString()) {
+    updatedAssignList.push(assign);
+  }
+
+  })
+
+   user.assignments = updatedAssignList;
+  await user.save()
+
+  res.json({ status, response: user })
+})
 module.exports = router;
