@@ -96,22 +96,20 @@ router.get('/ungraded', async(req, res, next) => {
 
         if(user.admin) {
             allUsers.map((user) => {
-                if(!user.admin) {
-                //I know that this is On^2, but it is the only solution
-                //I could think of with the way that the databases and relationships are constructed right now
-                    user.assignments.map((assignment) => {
-                        if(!assignment.assignmentGrade) {
-                            ungradedAssignments.push(
-                                {
-                                    firstName: user.firstName,
-                                    lastName: user.lastName,
-                                    assignmentTitle: assignment.assignmentTitle,
-                                    assignmentLink: assignment.assignmentLink,
-                                }
-                            );
-                        }
-                    });
-                }
+            //I know that this is On^2, but it is the only solution
+            //I could think of with the way that the databases and relationships are constructed right now
+                user.assignments.map((assignment) => {
+                    if(!assignment.assignmentGrade) {
+                        ungradedAssignments.push(
+                            {
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                assignmentTitle: assignment.assignmentTitle,
+                                assignmentLink: assignment.assignmentLink,
+                            }
+                        );
+                    }
+                });
             });
         }
 
