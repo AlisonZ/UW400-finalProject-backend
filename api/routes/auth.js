@@ -73,7 +73,8 @@ router.post('/login', async(req, res, next) => {
        console.error(e);
        const error = new Error('There is an error with your login credentials');
        error.status = 400;
-       next(error);
+       res.json(error)
+//       next(error);
     }
 });
 
